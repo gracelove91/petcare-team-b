@@ -29,33 +29,53 @@
 
 	<div class="container">
 		 <p>
-		  	예약날짜: <input type="text" id="datepicker" name="res_dt" value="<c:out value='${vo.res_dt} }'/>"/>
+		  	예약날짜: <input type="text" id="datepicker"  readonly="readonly" name="resDt" value="<c:out value='${vo.resDt }'/>"/>
 		 </p>
 		 
 		 <div>
-		     <p>예약시간 : <input type="text" id="datepicker" name="res_dt" value="<c:out value='${vo.res_time} }'/>"/>
+		     <p>예약시간 : <input type="text" id="datepicker"  readonly="readonly"name="resDt" value="<c:out value='${vo.resTime }'/>"/>
 		         
 		       </p>
 		 </div>
 		 	<div >
 			 <p>예약한 반려동물 :
-				  <input type="text" id="datepicker" name="res_dt" value="<c:out value='${vo.ani_name} }'/>"/>
+				  <input type="text" id="datepicker" readonly="readonly" name="resDt" value="<c:out value='${vo.aniName }'/>"/>
 			 </p>
 			</div>
 			<p> 증상:
-			 <textarea cols="40" rows="3" name="res_item" readonly="readonly"><c:out value='${vo.res_item}'/></textarea>
+			 <textarea cols="40" rows="3" name="resItem" readonly="readonly"><c:out value='${vo.resItem}'/></textarea>
 			 </p>
 			 
-			 <button type="submit" class="btn btn-info">변경하기</button>
-			 <button type="submit" class="btn btn-info">취소하기</button>
-			 <button type="submit" class="btn btn-info">뒤로가기</button>
+			 <button data-oper="modify" type="submit" class="btn btn-info">변경하기</button>
+			 <button data-oper="list" type="submit" class="btn btn-info">뒤로가기</button>
 	</div>
+		<form id="operForm" action="/reservation/modify" method="get">
+			<input type="hidden" id="treatNo" name="treatNo" value="<c:out value='${vo.treatNo}'/>">
+		</form>
 
 		 
  
 	<footer>
 		<%@ include file="../common/footer.jsp" %>
 	</footer>
+	
+	<script>
+		$(document).ready(function(){
+			var operForm= $('#operForm');
+			$('button[data-oper="modify"]').on('click', function(e){
+					operForm.attr("action","/reservation/modify").submit();
+			})
+				
+			$('button[data-oper="list"]').on('click',function(e){
+				
+					operForm.find("#treatNo").remove();
+					operForm.attr("action","/reservation/list");
+					operForm.submit();
+		
+			});
+		});
+	
+	</script>
 	<!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
