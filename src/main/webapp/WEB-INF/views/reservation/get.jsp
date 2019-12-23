@@ -29,27 +29,31 @@
 <div class="row justify-content-center align-items-center">
 		 <div class="col-10 col-md-8 col-lg-6">
 			<main class="main">
-			
+			<h3 class="section-title">상세페이지</h3>
 				<div class="container">
+					<p>
+					  	예약아이디: <input type="text" id="datepicker" class="form-control col-4"  readonly="readonly" name="userId" value="<c:out value='${vo.userId }'/>"/>
+					 </p>
+					 
 					 <p>
-					  	예약날짜: <input type="text" id="datepicker"  readonly="readonly" name="resDt" value="<c:out value='${vo.resDt }'/>"/>
+					  	예약날짜: <input type="text" id="datepicker" class="form-control col-4"  readonly="readonly" name="resDt" value="<c:out value='${vo.resDt }'/>"/>
 					 </p>
 					 
 					 <div>
-					     <p>예약시간 : <input type="text" id="datepicker"  readonly="readonly" name="resDt" value="<c:out value='${vo.resTime }'/>"/>
+					     <p>예약시간 : <input type="text" id="datepicker"  class="form-control col-4" readonly="readonly" name="resDt" value="<c:out value='${vo.resTime }'/>"/>
 					         
 					       </p>
 					 </div>
 					 	<div >
 						 <p>예약한 반려동물 :
-							  <input type="text"  readonly="readonly" name="aniName" value="<c:out value='${vo.aniName}'/>"/>
+							  <input type="text"  readonly="readonly" class="form-control col-4" name="aniName" value="<c:out value='${vo.aniName}'/>"/>
 							
 						 </p>
 						</div>
-						<p> 증상:
-						 </p>
-						 <textarea cols="40" rows="3" name="resItem" readonly="readonly"><c:out value='${vo.resItem}'/></textarea>
-						 <div>
+						<p> 증상:</p>
+						 <textarea cols="40" rows="3" name="resItem" readonly="readonly" class="form-control col-4"><c:out value='${vo.resItem}'/></textarea>
+						 
+						 <div style="margin-top:15px">
 							 <button data-oper="modify" type="submit" class="btn btn-info">변경하기</button>
 							 <button data-oper="remove" type="submit" class="btn btn-info">삭제하기</button>
 							 <button data-oper="list" type="submit" class="btn btn-info">뒤로가기</button>
@@ -60,7 +64,11 @@
 </div>
 
 		<form id="operForm"  method="get">
-			<input type="hidden" id="treatNo" name="treatNo" value="<c:out value='${vo.treatNo}'/>">
+			<input type="hidden" name="treatNo" value="<c:out value='${vo.treatNo}'/>">
+			<input type="hidden" name="pageNum" value="<c:out value='${cri.pageNum}'/>">
+			<input type="hidden" name="amount" value="<c:out value='${cri.amount}'/>">
+			<input type="hidden" name="type" value="<c:out value='${cri.type}'/>">
+			<input type="hidden" name="keyword" value="<c:out value='${cri.keyword}'/>">
 		</form>
 
 		 

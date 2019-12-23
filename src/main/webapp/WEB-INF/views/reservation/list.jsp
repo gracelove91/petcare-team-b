@@ -28,22 +28,37 @@
 		</header>
  
  
- <!-- 시작  -->
-
 <div class="container">
-
- 
 <main class="main">
+
   <h3 class="section-title">예약 내역</h3>
-  <form autocomplete="off">
+  <form autocomplete="off" id="dateLook">
 	  <p>
-	  	기간 조회 :<input id="startDate" class="dueDate"> ~ 
-	  	<input id="endDate" class="dueDate">
+	  	기간 조회  <input id="startDate" name ="startDate" class="dueDate" readonly="readonly"> ~ 
+	  	<input id="endDate" name="endDate" class="dueDate" readonly="readonly">
 	  	<button>기간으로 조회하기</button>
+	  	
+	  	<input type="hidden" name ="pageNum" value="${pageMaker.cri.pageNum }">
+		<input type="hidden" name = "amount" value="${pageMaker.cri.amount }">
 	  </p>
   </form>
+  
+  <c:if test="${pageMaker.cri.userAuth eq '200' }"> 
+  	<form id="userSearch">
+  	<div style='display:inline;min-width:1200px;'>
+  		<input name='searchId' class=''  style='min-width:500px'">
+  		<button style="min-width:140px">예약자명 검색</button>
+  	</div>
 
-  <table class="table table-bordered col-10">
+  		<input type="hidden" name ="pageNum" value="${pageMaker.cri.pageNum }">
+		<input type="hidden" name = "amount" value="${pageMaker.cri.amount }">
+  	</form>
+  </c:if>
+  
+ 	
+  
+
+  <table class="table table-bordered col-10" style="background-color:white">
     <thead>
       <tr>
       	<th>예약 번호</th>
@@ -52,10 +67,12 @@
         <th>병원</th>
         <th>반려동물</th>
         <th>등록일</th>
-      </tr>
+	    <c:set var="reser" value="${pageMaker.cri.userAuth}"/>
+	    <c:if test="${reser eq '200' }"><th>작성자id</th></c:if>
     </thead>
-    <tbody>
+   
     
+    <tbody>
     <c:forEach items="${list}" var="reservation">
       <tr>
       	<td><a href="/reservation/get?treatNo=<c:out value="${reservation.treatNo}"/>" ><%--  &userId=<c:out value="${userId}"/> --%>
@@ -65,41 +82,67 @@
         <td><c:out value="${reservation.hosName} "/></td>
         <td><c:out value="${reservation.aniName} "/></td>
         <td><c:out value="${reservation.regDt} "/></td>
+        <c:if test="${pageMaker.cri.userAuth eq '200' }"> <td><c:out value="${reservation.userId} "/></td></c:if>
       </tr>
      </c:forEach>
-<%--         <td><fmt formatDate pattern="yyyy-mm-dd" type="date" value="${reservation.res_dt} "/></td>
-        <td><fmt formatDate pattern="hh:mm" type="time" value="${reservation.res_dt} "/></td>
-        <td><fmt formatDate pattern="yyyy-mm-dd" type="date" value="${reservation.reg_dt}"/> </td> --%>
-      
       
     </tbody>
   </table>
   
-
    
       
       <div>
-	      <form class="search-box form-inline active-purple-4 align-items-center justify-content-center col-10">
-		      <select>
-		      	<option value="hos">병원</option>
-		      	<option value="aniname">반려동물이름</option>
+	      <form id="searchForm" action="/reservation/list" method="get" autocomplete="off" class="search-box form-inline active-purple-4 align-items-center justify-content-center col-10">
+		      <select name="type">
+		      	<option value="a"  <c:out value="${pageMaker.cri.type eq 'a' ?'selected': ''}"/>>반려동물이름</option>
+		      	<option value="h"  <c:out value="${pageMaker.cri.type eq 'h' ?'selected': ''}"/> >병원</option>
 		      </select>
 			  <input class="form-control form-control-sm w-75"
 			  	type="text"
 			  	placeholder="search."
-			    aria-label="Search">
-			  <i class="search-btn fas fa-search" aria-hidden="true"></i>
+			    aria-label="Search"
+			    name="keyword"  value= "">
+			     <button type="submit">
+					  <i class="search-btn fas fa-search" aria-hidden="true"></i>
+			    </button> 
+			    <input type="hidden" name ="pageNum" value="${pageMaker.cri.pageNum }">
+			    <input type="hidden" name = "amount" value="${pageMaker.cri.amount }">
+			    <%-- <input type="hidden" name = "type1" value="${pageMaker.cri.type }">
+			    <input type="hidden" name = "keyword1" value="${pageMaker.cri.keyword }">  --%> 
 			</form>
 		</div>
       <button id="goReser" type="button" class="btn btn-info">
      	 병원/동물 찾기
       </button>
-</div>
-
-
- </main>  
- 
- 
+      
+      
+      <div>
+      <form id="pageMove" action="/reservation/list" method="get" >
+      	<ul class="pagination">
+			<c:if test="${pageMaker.prev}">
+				<li class="page-item"><a href="${pageMaker.startPage-1 }" class="page-link">prev</a></li>
+			</c:if>
+			
+			<c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage }" var="num">
+				<li class="page-item ${pageMaker.cri.pageNum == num? 'active' : '' }">
+				<a href="${num}" class="page-link"> ${num}</a></li>
+			</c:forEach>
+			
+			<c:if test="${pageMaker.next}">
+				<li class="page-item"><a href="${pageMaker.endPage+1 }" class="page-link">next</a></li>
+			</c:if>      	
+      	</ul>
+      	<input type="hidden" name ="pageNum" value="${pageMaker.cri.pageNum }">
+	    <input type="hidden" name = "amount" value="${pageMaker.cri.amount }">
+	    <input type="hidden" name = "type" value="${pageMaker.cri.type }">
+	    <input type="hidden" name = "keyword" value="${pageMaker.cri.keyword }"> 
+      	
+      </form>
+       </div>
+      
+      
+</main>
+</div> 
  <!-- 끝 -->
  		<footer>
 			<%@ include file="../common/footer.jsp" %>
@@ -112,7 +155,32 @@
 			$('#goReser').on('click',function(){
 				self.location = "/sch/";
 			});
+			var pageMove = $('#pageMove');
+			$(".page-link").on("click",function(e){
+				e.preventDefault();
+				pageMove.find("input[name='pageNum']").val($(this).attr("href"));
+				pageMove.submit();
+			});
 			/* .dueDate */
+		});
+		
+		
+		var searchForm = $('#searchForm');
+		$("#searchForm button").on('click',function(e){
+			e.preventDefault;
+			if(!searchForm.find("input[name='keyword']").val()){
+				alert("키워드를 입력하세요");
+				return false;
+			}
+			searchForm.find("input[name='pageNum']").val(1);
+			serachForm.submit();			
+		});
+		
+		var dateLook =$("#dateLook");
+		$("#dateLook button").on('click',function(){
+			e.preventDefault();
+			dateLook.find("input[namme='pageNum']").val(1);
+			dateLook.submit();
 		});
 	
 		$(document).ready(function(){
@@ -124,32 +192,41 @@
 			    showOn: "both", 
 			    buttonImage: "/resources/img/reservation/calendar20.svg", 
 			    buttonImageOnly: true,
-			    /* onClose : function ( selectedDate ) {
+			    onClose : function ( selectedDate ) {
 			    	var eleId = $(this).attr("id");
                     var optionName = "";
 
-                    if(eleId.indexOf("startDate") > 0) {
-                        eleId = eleId.replace("startDate", "endDate");
-                        optionName = "minDate";
-                        //endDate mindate
-                    } else {
+                    if(eleId.indexOf("startDate") > 0 || $('#startDate').val() != null) {
+                    	if($('#startDate').val() > $('#endDate').val()){
+                    		$('#startDate').val($('#endDate').val()) ;
+                    	}else{
+	                        eleId = eleId.replace("startDate", "endDate");
+	                        optionName = "minDate";
+                    	}
+                    		
+                    } else if(eleId.indexOf("endDate")>0) {
+                    	if($('#startDate').val() < $('#endDate').val()){
+                    		$('#endDate').val()= $('#startDate').val();
+                    	}
                         eleId = eleId.replace("endDate", "startDate");
-                        optionName = "minDate";
+                        optionName = "maxDate";
                         //startdate maxdate
                     }
 
                     $("#"+eleId).datepicker( "option", optionName, selectedDate );        
                     //$(".searchDate").find(".chkbox2").removeClass("on"); 
-                } */
+                } 
 
 
 			}) ;
 			
 			var today = new Date();
-			var endDate = $.datepicker.formatDate("yymmdd",today);
-			var startDate =$('#startDate').val();
+			var endDate = $.datepicker.formatDate("yymmdd",$('#endDate').val());
+			//var startDate = $.datepicker.click
 			$("#endDate").val(endDate);
+			//var startDate =$('#startDate').val();
 			$("#endDate").datepicker( "option", "maxDate", today);
+			//$("#endDate").datepicker( "option", "minDate", startDate);
 			$("#startDate").datepicker( "option", "maxDate", endDate);
 		 });	
 			
@@ -158,7 +235,7 @@
 		
 	</script>
 
-	
+  
 				
 	<!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

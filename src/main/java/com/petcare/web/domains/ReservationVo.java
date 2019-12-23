@@ -27,6 +27,14 @@ public class ReservationVo {
 	private String aniName;
 	private String reserTime;
 	
+	
+	private String type;
+	private String keyword;
+	
+	public String[] getTypeArr(){
+		return type== null ? new String[] {} : type.split("");
+	}
+	
 
 	
 	

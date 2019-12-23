@@ -23,11 +23,6 @@
 </head>
 <body>
 
-<%-- 	<% 
-		request.setCharacterEncoding("euc-kr"); 
-	    int hos_no = Integer.parseInt(request.getParameter("hosNo"));
-	%> --%>
-	   
 
 	
 	<div id="root">
@@ -35,28 +30,23 @@
 			<%@ include file="../common/header.jsp" %>
 		</header>
 	</div>
-		<%-- <c:if test="${msg == false}">
-			<p> 로그인을 해주세요 </p>
-		</c:if> --%>
-		
+	
 
-<!-- <div class="row h-100 justify-content-center align-items-center"></div>
-		<div class="col-10 col-md-8 col-lg-6"></div> -->
-		<div class="row justify-content-center align-items-center">
-		 <div class="col-10 col-md-8 col-lg-6">
+<div class="row justify-content-center align-items-center">
+	<div class="col-10 col-md-8 col-lg-6">
 	<main class="main">
 		<h6 class="section-title">예약 하기</h6>
 		<form role="form"  class="form shadow-sm rounded" action="/reservation/regist" method="post" autocomplete="off" class="shadow-sm rounded hospital-search-form">
 			<div class="container">
-				 <p>
-				  	예약날짜: <input type="text" id="datepicker" name="resDt"/>
+				 <p >
+				  	예약날짜: <input type="text" id="datepicker" name="resDt" readonly="readonly"/>
 				 </p>
 				
 				<input type="hidden"  id="hosNo" value="${hosNo}" name="hosNo">
 				
 				 <div>
 				     <p>예약시간 :
-				         <select id="res_time" name="resTime">
+				         <select id="res_time" name="resTime" class="form-control col-4">
 				             <option value="09:00">9:00</option>
 				             <option value="10:00">10:00</option>
 				             <option value="11:00">11:00</option>
@@ -72,7 +62,7 @@
 				 
 				 <div>
 					 <p>예약할 반려동물 :
-						 <select  name="aniNo">
+						 <select  name="aniNo" class="form-control col-4">
 							 <c:forEach items="${aninoList}" var="Nolist">
 				       			<option value="<c:out value="${Nolist.aniNo}"/>"><c:out value="${Nolist.aniName}"/></option>
 				       		</c:forEach>
@@ -80,15 +70,15 @@
 					 </p>
 				 </div>
 					<p>증상</p>
-					 <textarea cols="40" rows="3" id="comment" name="resItem" ></textarea>
+					 <textarea cols="40" rows="3" id="comment" name="resItem" class="form-control col-4"></textarea>
 					 <div>
-						 <button type="submit" class="search-button btn btn-primary d-flex justify-content-center">예약하기</button>
+						 <button type="submit" class="search-button btn btn-primary d-flex justify-content-right">예약하기</button>
 					 </div>
 			</div>
 		 </form>
 	</main>
-		 </div>
-		</div>
+	</div>
+</div>
 		 
  
 	<footer>
@@ -113,6 +103,9 @@
 		}) ;
 		var today = new Date();
 		$("#datepicker").datepicker( "option", "minDate", today );
+		
+		var dDate = $.datepicker.formatDate("yymmdd",today);
+		$("#datepicker").val(dDate);
 	 });
 
 	</script>	
