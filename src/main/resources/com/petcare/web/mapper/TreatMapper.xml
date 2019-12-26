@@ -16,10 +16,16 @@
 	</resultMap>
 	
 
-	<select id="getList" resultMap="TreatVo">
+	<select id="getReserList" resultType="ReservationVo">
+		select * from reservation
+	</select>
+	
+	<select id="getTreatList" resultMap="TreatVo">
 		select * from treat
 	
 	</select>
+	
+	
 	
 	<select id="getTime" resultMap="TreatVo">
 		select * from tbl_time

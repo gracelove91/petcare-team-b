@@ -10,14 +10,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.petcare.web.domains.Criteria;
 import com.petcare.web.domains.CustomerVO;
 import com.petcare.web.domains.ReservationVo;
+import com.petcare.web.domains.pageDTO;
 import com.petcare.web.service.ReservationService;
 
 @Controller
@@ -28,17 +31,24 @@ public class ReservationController {
 	ReservationService service;
 
 	@GetMapping("/list")
-	public String list(Model model,HttpSession session) {
+	public String list(Criteria cri,Model model,HttpSession session) {
 		//@RequestParam(value="userId")String userId,
 		
-		  CustomerVO logna =(CustomerVO)session.getAttribute("login"); 
-		  String userId = logna.getUserId();
-		  
-		  //model.addAttribute("userId",userId);
-		 			
-			
-		model.addAttribute("list",service.getList(userId));
-			return "reservation/list";
+		CustomerVO logna =(CustomerVO)session.getAttribute("login"); 
+		String userId = ((CustomerVO) logna).getUserId();
+		String userAuth = (String)logna.getUserAuth();
+		if(userId == null) {
+		  return "/user/login";
+		}
+		
+		cri.setUserId(userId);
+		cri.setUserAuth(userAuth);
+		int total =service.getTotalNum(cri);
+		
+		model.addAttribute("list",service.getList(cri));
+		model.addAttribute("pageMaker",new pageDTO(cri,total));
+		
+			return "reservation/list" ;
 		  
 	}
 		 
@@ -50,6 +60,7 @@ public class ReservationController {
 		//model.addAttribute("selectList",service.);
 		CustomerVO obj = (CustomerVO)session.getAttribute("login");
 		String userId = obj.getUserId();
+		
 		if(userId == null) {
 			rttr.addFlashAttribute("msg","false");
 			
@@ -84,7 +95,7 @@ public class ReservationController {
 	
 	
 	@PostMapping("/modify")
-	public String modify(ReservationVo vo ,RedirectAttributes rttr,Model model,HttpSession session) {
+	public String modify(Criteria cri,ReservationVo vo ,RedirectAttributes rttr,Model model,HttpSession session) {
 		CustomerVO user= (CustomerVO)session.getAttribute("login");
 		String userId =user.getUserId();
 		model.addAttribute("userId",userId);
@@ -92,7 +103,13 @@ public class ReservationController {
 		if(service.modify(vo)) {
 			rttr.addFlashAttribute("modify","success");
 		}
-		return "redirect:/reservation/list";
+		/*
+		 * rttr.addAttribute("pageNum" , cri.getPageNum()); rttr.addAttribute("amount" ,
+		 * cri.getAmount()); rttr.addAttribute("type" , cri.getType());
+		 * rttr.addAttribute("keyword" , cri.getKeyword());
+		 */
+		
+		return "redirect:/reservation/list" +cri.getListLink();
 	}
 	
 	@GetMapping("/modify")
@@ -105,16 +122,22 @@ public class ReservationController {
 	}
 	
 	@PostMapping("/remove")
-	public String remove(@RequestParam("treatNo") int treatNo,RedirectAttributes rttr) {
+	public String remove(Criteria cri,@RequestParam("treatNo") int treatNo,RedirectAttributes rttr) {
 		if(service.remove(treatNo)) {
 			
 			rttr.addFlashAttribute("remove","success");
 		}
-		return "redirect:/reservation/list";
+		/*
+		 * rttr.addAttribute("pageNum" , cri.getPageNum()); rttr.addAttribute("amount" ,
+		 * cri.getAmount()); rttr.addAttribute("type" , cri.getType());
+		 * rttr.addAttribute("keyword" , cri.getKeyword());
+		 */
+		
+		return "redirect:/reservation/list"+cri.getListLink();
 	}
 	
 	@GetMapping("/get")
-	public void get(@RequestParam("treatNo") int treatNo,Model model) {
+	public void get(@RequestParam("treatNo") int treatNo,@ModelAttribute("cri")Criteria cri ,Model model) {
 		
 		model.addAttribute("vo",service.get(treatNo));
 	}

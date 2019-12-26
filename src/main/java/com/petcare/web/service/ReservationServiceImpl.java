@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.petcare.web.domains.AnimalVO;
+import com.petcare.web.domains.Criteria;
 import com.petcare.web.domains.ReservationVo;
+import com.petcare.web.domains.pageDTO;
 import com.petcare.web.mapper.ReservationMapper;
 @Service
 public class ReservationServiceImpl implements ReservationService{
@@ -35,14 +37,11 @@ public class ReservationServiceImpl implements ReservationService{
 		return mapper.delete(treatNo)==1;
 	}
 
-	@Override
-	public List<ReservationVo> getList() {
-		return mapper.getList();
-	}
+	
 
 	@Override
-	public List<ReservationVo> getList(String userId) {
-		return mapper.getList(userId);
+	public List<ReservationVo> getList(Criteria cri,String userId) {
+		return mapper.getList(cri, userId);
 	}
 
 	@Override
@@ -55,4 +54,42 @@ public class ReservationServiceImpl implements ReservationService{
 	public List<AnimalVO> getAniNo(String userId) {
 		return mapper.getAniNo(userId);
 	}
+
+	@Override
+	public List<ReservationVo> getSearchList(String userId) {
+		return mapper.getSearchList(userId);
+	}
+
+	@Override
+	public Integer getTotalNum(Criteria cri,String userId) {
+		  
+		return mapper.pageTotalNum(cri , userId);
+	}
+
+	@Override
+	public List<ReservationVo> getList(String userId) {
+		return mapper.getList(userId);
+	}
+
+	@Override
+	public int getTotalNum(String userId) {
+		return mapper.pageTotalNum(userId);
+	}
+
+	@Override
+	public List<ReservationVo> getList(Criteria cri) {
+		return mapper.getList(cri);
+	}
+
+	@Override
+	public List<ReservationVo> getList(pageDTO Pdto) {
+		return mapper.getList(Pdto);
+	}
+
+	@Override
+	public int getTotalNum(Criteria cri) {
+		return mapper.pageTotalNum(cri);
+	}
+
+	
 }

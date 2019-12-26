@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.petcare.web.domains.ReservationVo;
 import com.petcare.web.domains.TreatVo;
 import com.petcare.web.mapper.TreatMapper;
 @Service
@@ -13,8 +14,13 @@ public class TreatServiceImple implements TreatService{
 	TreatMapper mapper;
 	
 	@Override
-	public List<TreatVo> getList() {
-		return mapper.getList();
+	public List<ReservationVo> getReserList() {
+		return mapper.getReserList();
+	}
+	
+	@Override
+	public List<TreatVo> getTreatList() {
+		return mapper.getTreatList();
 	}
 
 	@Override
@@ -36,5 +42,8 @@ public class TreatServiceImple implements TreatService{
 	public List<String> getTime() {
 		return mapper.getTime();
 	}
+
+
+
 
 }
